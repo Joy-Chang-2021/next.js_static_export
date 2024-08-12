@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# static export
 
-## Getting Started
+### [Github Page Demo](https://joy-chang-2021.github.io/next.js_static_export/)
 
-First, run the development server:
+- 輸出靜態網頁、部署於 github-page
+  1. [Static Exports](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) | NEXT.js
+  2. [Deploy a Next.js App to GitHub Pages](https://youtu.be/mJuz45RXeXY) | NL Tech on Youtube
+  3. [How to Deploy Next.js Apps to Github Pages](https://www.freecodecamp.org/news/how-to-deploy-next-js-app-to-github-pages/) | freeCodeCamp
+  4. [Next.js Deploy as a Static Site using Github Pages](https://dev.to/lico/nextjs-deploy-as-static-site-using-github-pages-3bhm) | SeongKuk Han from Dev.to
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
+### next.config.js
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. `output` 設定專案為靜態打包輸出
+2. `basePath`  
+    專案資源 Next.js 原本預設路徑是 `https://<username>.github.io/`  
+    使用 basePath 將路徑設為 `https://<username>.github.io/<project-name>/`  
+3. `assetPrefix` 
+    - 將靜態資源託管於 CDN 服務、減少專案伺服器載入的資源流量 [doc ↗](https://nextjs.org/docs/app/api-reference/next-config-js/assetPrefix)
+    - 設定 assetPrefix 為 CDN 的前綴路徑  
+        Next.js 會自動將 `/_next/` 路徑內載入的靜態資源加上 asset prefix  
+        → 此專案並未將資源部署在 CDN 服務上，故未使用此設定
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+    ```javascript
+    const nextConfig = {
+        output: "export",
+        basePath: "/專案名稱",
+    }
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    export default nextConfig
+    ```
 
-## Learn More
+### images
+- 原絕對路徑 `<Image src="/vercel.svg" />` 改為相對路徑 `<Image src="vercel.svg" />`
 
-To learn more about Next.js, take a look at the following resources:
+### github actions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Settings > Pages > Github Actions > Configure 依序點選設定  
+    - github 根據專案內框架提供相應的自動化流程設定選擇
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    ![set-action](public/set-action.jpg)
 
-## Deploy on Vercel
+2. github 設定自動化工作流程
+    - yml 檔案名稱可以隨意修改
+    - 視需求調整設定內容
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ![create-action-yml](public/create-action-yml.jpg)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. 每次推送/合併於 main 分支時，會自動部署更新 github-pages
+    - 可於 Actions 查看部署過程
+
+    ![gh-process](public/gh-process.jpg)
+
+---
+
+### Additional Notes
+- 有些文章建議於根目錄新增 `.nojekyll` 檔案
+    1. [about-github-pages](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages) | GitHub Docs
+    2. [bypassing-jekyll-on-github-pages](https://github.blog/news-insights/the-library/bypassing-jekyll-on-github-pages/) | GitHub Blog
+    - GitHub Pages 目前由 GitHub Actions 來執行 Jekyll 打包輸出  
+    因 Jekyll 將 `_` 開頭的檔案及資料夾視為特殊資源、不會進行打包處理
+    - 如果無法使用 GitHub Actions，將 `.nojekyll` 建立於專案根目錄中，繞過 Jekyll 打包流程、直接部署專案內容
