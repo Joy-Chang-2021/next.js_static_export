@@ -1,4 +1,4 @@
-# static export
+# Next.js static export
 
 ### [Github Page Demo](https://joy-chang-2021.github.io/next.js_static_export/)
 
