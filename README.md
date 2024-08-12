@@ -9,6 +9,8 @@
   4. [Next.js Deploy as a Static Site using Github Pages](https://dev.to/lico/nextjs-deploy-as-static-site-using-github-pages-3bhm) | SeongKuk Han from Dev.to
 
 ---
+- 動態路由、靜態打包設定 [參考↗](https://github.com/Joy-Chang-2021/next.js_static_export_with_dynamic_routes)
+
 ### next.config.js
 
 1. `output` 設定專案為靜態打包輸出
